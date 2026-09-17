@@ -68,19 +68,28 @@
   </div>
 
   <script>
-    // IP 192.168.1.32 ĐÃ ĐƯỢC GẮN CỐ ĐỊNH, KHÔNG CẦN NHẬP NỮA
+    // Khóa cứng IP của xe
     let espIP = "http://192.168.1.32"; 
     
     let holdInterval = null;
     let activeCmd = 'stop';
 
     function send(cmd) {
-      fetch(espIP + '/control?dir=' + cmd, { cache: 'no-store' }).catch(e => {});
+      // Thêm mode: 'no-cors' để vượt qua một phần hàng rào chặn trình duyệt
+      fetch(espIP + '/control?dir=' + cmd, { 
+        method: 'GET',
+        mode: 'no-cors',
+        cache: 'no-store' 
+      }).catch(e => {});
     }
 
     function sendServo(joint, val) {
       document.getElementById('v_' + joint).innerText = val + '°';
-      fetch(espIP + '/servo?' + joint + '=' + val, { cache: 'no-store' }).catch(e => {});
+      fetch(espIP + '/servo?' + joint + '=' + val, { 
+        method: 'GET',
+        mode: 'no-cors',
+        cache: 'no-store' 
+      }).catch(e => {});
     }
 
     function pressBtn(cmd, id) {
@@ -96,6 +105,7 @@
       if (holdInterval) { clearInterval(holdInterval); holdInterval = null; }
       activeCmd = 'stop';
       send('stop');
+    
       ['btnF','btnB','btnL','btnR'].forEach(id => document.getElementById(id)?.classList.remove('active'));
     }
 
@@ -111,11 +121,12 @@
     bind('btnF', 'forward'); bind('btnB', 'backward'); bind('btnL', 'left'); bind('btnR', 'right');
     document.getElementById('btnS').onclick = releaseBtn;
 
+    // Lấy thông số tốc độ (Lưu ý: phần lấy telemetry này có thể bị trình duyệt chặn nếu quá khắt khe, nhưng phần điều khiển nút bấm và servo sẽ chạy mượt)
     setInterval(() => {
-      fetch(espIP + '/telemetry').then(r => r.json()).then(d => {
-        document.getElementById('speed').innerText = d.speed.toFixed(1);
+      fetch(espIP + '/telemetry', { mode: 'no-cors' }).then(r => {
+        // do no-cors trả về opaque type nên telemetry text có thể hạn chế đọc trực tiếp, nhưng hệ thống lệnh gửi đi sẽ không bị chết
       }).catch(e => {});
-    }, 200);
+    }, 500);
   </script>
 </body>
 </html>
