@@ -9,11 +9,6 @@
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #fff; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; }
     h1 { color: #38bdf8; font-size: 22px; margin: 15px 0; text-transform: uppercase; letter-spacing: 1.5px; text-align: center; }
     
-    .ip-box { background: #334155; padding: 10px 15px; border-radius: 10px; width: 100%; max-width: 350px; margin-bottom: 15px; display: flex; justify-content: space-between; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-    .ip-box input { width: 65%; padding: 8px; border-radius: 5px; border: none; outline: none; background: #f8fafc; font-weight: bold; }
-    .ip-box button { width: 30%; background: #4ade80; color: #0f172a; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
-    .ip-box button:active { background: #22c55e; }
-
     .speed-card { background: #1e293b; border: 1px solid #334155; border-radius: 15px; padding: 10px 20px; text-align: center; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 100%; max-width: 350px; }
     .speed-val { font-size: 36px; font-weight: 800; color: #4ade80; font-family: monospace; line-height: 1; }
     .speed-unit { font-size: 11px; color: #94a3b8; text-transform: uppercase; margin-top: 5px; }
@@ -36,11 +31,6 @@
 <body>
   <h1>ĐIỀU KHIỂN XE CỨU HỘ</h1>
   
-  <div class="ip-box">
-    <input type="text" id="ip_address" placeholder="Nhập IP ESP32 (VD: 192.168.1.10)">
-    <button onclick="saveIP()">KẾT NỐI</button>
-  </div>
-
   <div class="speed-card">
     <div class="speed-val" id="speed">0.0</div>
     <div class="speed-unit">Tốc độ thực tế (km/h)</div>
@@ -59,22 +49,18 @@
 
   <div class="panel">
     <h3 style="margin: 0 0 15px 0; color: #f8fafc; font-size: 16px;">Điều khiển cánh tay Robot</h3>
-    
     <div class="servo-row">
       <div class="servo-label"><span>Đế</span><span id="v_base">90°</span></div>
       <input type="range" min="0" max="180" value="90" oninput="sendServo('base', this.value)">
     </div>
-    
     <div class="servo-row">
       <div class="servo-label"><span>Cánh tay 1</span><span id="v_shoulder">90°</span></div>
       <input type="range" min="0" max="180" value="90" oninput="sendServo('shoulder', this.value)">
     </div>
-    
     <div class="servo-row">
       <div class="servo-label"><span>Cánh tay 2</span><span id="v_elbow">90°</span></div>
       <input type="range" min="0" max="180" value="90" oninput="sendServo('elbow', this.value)">
     </div>
-    
     <div class="servo-row">
       <div class="servo-label"><span>Cánh tay gắp</span><span id="v_gripper">90°</span></div>
       <input type="range" min="0" max="180" value="90" oninput="sendServo('gripper', this.value)">
@@ -82,27 +68,17 @@
   </div>
 
   <script>
-    let espIP = "";
+    // IP 192.168.1.32 ĐÃ ĐƯỢC GẮN CỐ ĐỊNH, KHÔNG CẦN NHẬP NỮA
+    let espIP = "http://192.168.1.32"; 
+    
     let holdInterval = null;
     let activeCmd = 'stop';
 
-    function saveIP() {
-      let val = document.getElementById("ip_address").value.trim();
-      if(val !== "") {
-        espIP = "http://" + val;
-        alert("Đã kết nối với mạch qua IP:\n" + espIP);
-      } else {
-        alert("Vui lòng nhập IP của ESP32 in trên màn hình Serial Monitor!");
-      }
-    }
-
     function send(cmd) {
-      if(!espIP) return;
       fetch(espIP + '/control?dir=' + cmd, { cache: 'no-store' }).catch(e => {});
     }
 
     function sendServo(joint, val) {
-      if(!espIP) return;
       document.getElementById('v_' + joint).innerText = val + '°';
       fetch(espIP + '/servo?' + joint + '=' + val, { cache: 'no-store' }).catch(e => {});
     }
@@ -136,7 +112,6 @@
     document.getElementById('btnS').onclick = releaseBtn;
 
     setInterval(() => {
-      if(!espIP) return;
       fetch(espIP + '/telemetry').then(r => r.json()).then(d => {
         document.getElementById('speed').innerText = d.speed.toFixed(1);
       }).catch(e => {});
