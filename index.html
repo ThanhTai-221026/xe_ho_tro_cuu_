@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>4G Rescue Control</title>
+  <title>Thiết bị điều khiển</title>
   <!-- Nạp thư viện MQTT cho Web -->
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
   <style>
@@ -65,7 +65,7 @@
       <input type="range" min="0" max="180" value="90" oninput="sendServo('elbow', this.value)">
     </div>
     <div class="servo-row">
-      <div class="servo-label"><span>Gripper (Kẹp)</span><span id="v_gripper">90°</span></div>
+      <div class="servo-label"><span>Gripper (Cánh tay kẹp)</span><span id="v_gripper">90°</span></div>
       <input type="range" min="0" max="180" value="90" oninput="sendServo('gripper', this.value)">
     </div>
   </div>
