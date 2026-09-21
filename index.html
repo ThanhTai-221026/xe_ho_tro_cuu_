@@ -44,28 +44,28 @@
     <div class="grid">
       <button class="btn" id="btnF">▲</button>
       <button class="btn" id="btnL">◄</button>
-      <button class="btn btn-stop" id="btnS">STOP</button>
+      <button class="btn btn-stop" id="btnS">DỪNG</button>
       <button class="btn" id="btnR">►</button>
       <button class="btn" id="btnB">▼</button>
     </div>
   </div>
 
   <div class="panel">
-    <h3 style="margin: 0 0 15px 0; color: #f8fafc; font-size: 16px;">Robotic Arm Control</h3>
+    <h3 style="margin: 0 0 15px 0; color: #f8fafc; font-size: 16px;">Điều Khiển Cánh Tay Robot</h3>
     <div class="servo-row">
-      <div class="servo-label"><span>Base (Đế)</span><span id="v_base">90°</span></div>
+      <div class="servo-label"><span>Đế</span><span id="v_base">90°</span></div>
       <input type="range" min="0" max="180" value="90" oninput="sendServo('base', this.value)">
     </div>
     <div class="servo-row">
-      <div class="servo-label"><span>Shoulder (Cánh tay 1)</span><span id="v_shoulder">90°</span></div>
+      <div class="servo-label"><span>Cánh tay 1</span><span id="v_shoulder">90°</span></div>
       <input type="range" min="0" max="180" value="90" oninput="sendServo('shoulder', this.value)">
     </div>
     <div class="servo-row">
-      <div class="servo-label"><span>Elbow (Cánh tay 2)</span><span id="v_elbow">90°</span></div>
+      <div class="servo-label"><span>Cánh tay 2</span><span id="v_elbow">90°</span></div>
       <input type="range" min="0" max="180" value="90" oninput="sendServo('elbow', this.value)">
     </div>
     <div class="servo-row">
-      <div class="servo-label"><span>Gripper (Cánh tay kẹp)</span><span id="v_gripper">90°</span></div>
+      <div class="servo-label"><span>Cánh tay kẹp</span><span id="v_gripper">90°</span></div>
       <input type="range" min="0" max="180" value="90" oninput="sendServo('gripper', this.value)">
     </div>
   </div>
@@ -76,7 +76,7 @@
     
     client.on('connect', () => {
       const statusEl = document.getElementById('status');
-      statusEl.innerText = "Đã kết nối Server";
+      statusEl.innerText = "Đã kết nối Máy Chủ";
       statusEl.classList.add('connected');
       client.subscribe('rescue_car/telemetry');
     });
